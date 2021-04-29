@@ -1,70 +1,90 @@
 # csv-map-viewer README
 
-This is the README for your extension "csv-map-viewer". After writing up a brief description, we recommend including the following sections.
+"csv-map-viewer" は、特殊な仕様で定義された CSV ファイルのためのビューワーです。
+
+例えば、次の CSV ファイルのように、行によって列の意味が異なる仕様の CSV の場合、この拡張機能は役に立ちます。この拡張機能は、現在のカーソルの列の意味が何であるかを教えてくれます。
+
+```csv
+A,John,john@gmail,Company1,0123456789
+B,3374 Vitae Road,Merrickville-Wolford,88383,Ontario,Saint Martin
+A,Alex,alex@gmail,Company2,1123456789
+B,171-328 Pellentesque St.,Bhagalpur,3542 CJ,BR,Netherlands
+0,a,b,c,d,e,f
+```
+
+あらかじめ、拡張機能の settings に列の意味を JSON で定義することで、この拡張機能は動きます。
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+初めに、Extension Settings で 列の意味を JSON で定義します。次の例は、先頭の列の値が `A` であるとき、1列目は `Name`、2列目は `Email` であることを定義しています。
 
-For example if there is an image subfolder under your extension project workspace:
+````json
+"A": {
+    "0": { "title" : "A", "description": "A description" },
+    "1": { "title" : "Names", "description": "Names description" },
+    "2": { "title" : "Email", "description": "Email description" },
+    "3": { "title" : "Company", "description": "Company description" },
+    "4": { "title" : "Phone", "description": "Phone description" }
+},
+"B": { 
+    // ... 
+}
+````
 
-\!\[feature X\]\(images/feature-x.png\)
+Editor を開き、コマンドパレットから `CSV Map Viewer: Show` を実行すると、左下のバーに、現在のカーソルがある列の意味が表示されます。
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+<img width="749" alt="Screen Shot 2021-04-29 at 22 07 30" src="https://user-images.githubusercontent.com/8636660/116556475-6ef8e480-a938-11eb-91a1-17b69710e25b.png">
 
-## Requirements
+![Screen_Shot_2021-04-29_at_21_49_55](https://user-images.githubusercontent.com/8636660/116554832-9b136600-a936-11eb-9f44-168686bbd13a.jpg)
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+![sample](https://user-images.githubusercontent.com/8636660/116559599-943b2200-a93b-11eb-9611-f7596fc69d0e.gif)
+
+
+次に、コマンドパレットから `CSV Map Viewer: Output` を実行すると、Output Window の `CSV Map Viewer` の Output に、ファイル全体の情報を表示します。 
+
+<img width="899" alt="Screen Shot 2021-04-29 at 22 08 16" src="https://user-images.githubusercontent.com/8636660/116556465-6d2f2100-a938-11eb-8d40-a3b990b8be77.png">
+
+
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+* `csv-map-viewer.map`(Object): CSV ファイルの各行ごとの列の意味を定義します
 
-For example:
+Example:
 
-This extension contributes the following settings:
+```json
+"csv-map-viewer.map": {
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+    "YOUR FIRST COLUMN TEXT": {
+        "0": { "title" : "column 0 title", "description": "" },
+        "1": { "title" : "column 1 title", "description": "" }
+    },
+    "A": {
+        "0": { "title" : "A", "description": "A description" },
+        "1": { "title" : "Names", "description": "Names description" },
+        "2": { "title" : "Email", "description": "Email description" },
+        "3": { "title" : "Company", "description": "Company description" },
+        "4": { "title" : "Phone", "description": "Phone description" }
+    },
+    "B": {
+        "0": { "title" : "B", "description": "B description" },
+        "1": { "title" : "Street Address", "description": "description-B-0" },
+        "2": { "title" : "City", "description": "description-B-1" },
+        "3": { "title" : "Zip", "description": "description-B-1" },
+        "4": { "title" : "Region", "description": "description-B-1" },
+        "5": { "title" : "Country", "description": "description-B-1" }
+    }
+}
+```
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+ダブルクォーテーションの中にある`,`の対応が行われていません。
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
 
-### 1.0.0
 
-Initial release of ...
+### 0.0.1
 
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Initial release

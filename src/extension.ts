@@ -38,7 +38,7 @@ function showInformationMessageCommand(): void {
 	setUpdateStatusBarItem(true);
 	const info = getCsvInformationByCursor(vscode.window.activeTextEditor);
 	if (info) {
-		vscode.window.showInformationMessage(`$(info) [${info.title ?? ''}] ${info.description ?? ''}`);
+		vscode.window.showInformationMessage(`[${info.title ?? ''}] ${info.description ?? ''}`);
 	} else {
 		console.log('Not found CSV MAP information');
 	}
@@ -83,7 +83,8 @@ function getCsvInformationByCursor(editor: vscode.TextEditor | undefined): { tit
 }
 
 function getCsvPosition(lineText: vscode.TextLine, position: vscode.Position): { firstColumnTextAtLine: string, csvColumnIndex: number } {
-	const csvColumnIndex = lineText.text.substring(0, position.character).match(/,/g)?.length ?? 0;
+	const forwardColumnLength = lineText.text.substring(0, position.character).match(/,/g)?.length;
+	const csvColumnIndex = forwardColumnLength ? forwardColumnLength : 0;
 	let firstColumnTextAtLine = lineText.text;
 	if (lineText.text.indexOf(',') >= 0) {
 		firstColumnTextAtLine = lineText.text.substring(0, lineText.text.indexOf(','));
