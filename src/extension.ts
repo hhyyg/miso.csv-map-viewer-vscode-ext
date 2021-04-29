@@ -3,8 +3,10 @@ import * as vscode from 'vscode';
 // configration docs
 // https://code.visualstudio.com/api/references/contribution-points#contributes.configuration
 
-const myCommandId = 'csv-map-viewer.show';
+const myCommandId_show = 'csv-map-viewer.show';
+const myCommandId_output = 'csv-map-viewer.output';
 
+let outputChannel: vscode.OutputChannel;
 let myStatusBarItem: vscode.StatusBarItem;
 let extentionsSettingsMapObject: any;
 let enableUpdateStatusBarItem = false;
@@ -14,21 +16,14 @@ let enableUpdateStatusBarItem = false;
 export function activate(context: vscode.ExtensionContext) {
 	const extentionsSettings = vscode.workspace.getConfiguration('csv-map-viewer');
 	extentionsSettingsMapObject = extentionsSettings.get<any>('map');
+	outputChannel = vscode.window.createOutputChannel('CSV Map Viewer');
 
-	let disposable = vscode.commands.registerCommand(myCommandId, () => {
-		setUpdateStatusBarItem(true);
-		const info = getCsvInformationByCursor(vscode.window.activeTextEditor);
-		if (info) {
-			vscode.window.showInformationMessage(`$(info) [${info.title ?? ''}] ${info.description ?? ''}`);
-		} else {
-			console.log('Not found CSV MAP information');
-		}
-	});
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(vscode.commands.registerCommand(myCommandId_show, showInformationMessageCommand));
+	context.subscriptions.push(vscode.commands.registerCommand(myCommandId_output, commandCsvMapToOutputWindow));
 
 	// create a new status bar item that we can now manage
 	myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 100);
-	myStatusBarItem.command = myCommandId;
+	myStatusBarItem.command = myCommandId_show;
 	context.subscriptions.push(myStatusBarItem);
 
 	context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(() => setUpdateStatusBarItem(false)));
@@ -37,6 +32,16 @@ export function activate(context: vscode.ExtensionContext) {
 
 // this method is called when your extension is deactivated
 export function deactivate() {}
+
+function showInformationMessageCommand(): void {
+	setUpdateStatusBarItem(true);
+	const info = getCsvInformationByCursor(vscode.window.activeTextEditor);
+	if (info) {
+		vscode.window.showInformationMessage(`$(info) [${info.title ?? ''}] ${info.description ?? ''}`);
+	} else {
+		console.log('Not found CSV MAP information');
+	}
+}
 
 function setUpdateStatusBarItem(enable: boolean): void {
 	enableUpdateStatusBarItem = enable;
@@ -86,4 +91,21 @@ function getCsvPosition(lineText: vscode.TextLine, position: vscode.Position): {
 		firstColumnTextAtLine: firstColumnTextAtLine,
 		csvColumnIndex: csvColumnIndex,
 	};
+}
+
+function commandCsvMapToOutputWindow(): void {
+    outputChannel.appendLine("Hello- 😀💻");
+
+	const editor = vscode.window.activeTextEditor;
+	if (!editor) {
+		return;
+	}
+	const text = editor.document.getText();
+	if (!text) {
+		return;
+	}
+	for (let lineIndex = 0; lineIndex < editor.document.lineCount; lineIndex++) {
+		const line = editor.document.lineAt(lineIndex);
+		// TODO
+	}
 }
