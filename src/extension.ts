@@ -1,3 +1,4 @@
+import { stringify } from 'node:querystring';
 import * as vscode from 'vscode';
 
 // configration docs
@@ -94,18 +95,46 @@ function getCsvPosition(lineText: vscode.TextLine, position: vscode.Position): {
 }
 
 function commandCsvMapToOutputWindow(): void {
-    outputChannel.appendLine("Hello- 😀💻");
+    outputChannel.appendLine('💻 Output');
 
+	if (!extentionsSettingsMapObject) {
+		return;
+	}
 	const editor = vscode.window.activeTextEditor;
 	if (!editor) {
 		return;
 	}
-	const text = editor.document.getText();
+	const text = editor?.document.getText();
 	if (!text) {
 		return;
 	}
+
+	const results: {
+		title: string,
+		value: string,
+	}[] = [];
+
 	for (let lineIndex = 0; lineIndex < editor.document.lineCount; lineIndex++) {
-		const line = editor.document.lineAt(lineIndex);
-		// TODO
+		const textLine = editor.document.lineAt(lineIndex);
+		const columns = textLine.text.split(',');
+		if (columns.length === 0) {
+			continue;
+		}
+
+		const rowMapInfo = extentionsSettingsMapObject[columns[0]];
+		if (!rowMapInfo) {
+			continue;
+		}
+		for (let columnIndex = 0; columnIndex < columns.length; columnIndex++) {
+			const mapInfo = rowMapInfo[columnIndex];
+			if (!mapInfo) {
+				continue;
+			}
+			results.push({ title: mapInfo.title, value: columns[columnIndex] });
+		}
+	}
+
+	for (const item of results) {
+		outputChannel.appendLine(`${item.title}: ${item.value}`);
 	}
 }
