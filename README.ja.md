@@ -16,7 +16,7 @@ B,171-328 Pellentesque St.,Bhagalpur,3542 CJ,BR,Netherlands
 
 ## Features
 
-初めに、Extension Settings で 列の意味を JSON で定義します。次の例は、先頭の列の値が `A` であるとき、1列目は `Name`、2列目は `Email` であることを定義しています。
+初めに、Extension Settings で 列の意味を JSON で定義します。次の例は、先頭の列の値が `A` であるとき、2列目は `Name`、3列目は `Email` であることを定義しています。
 
 ````json
 "A": {
