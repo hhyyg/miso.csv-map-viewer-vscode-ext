@@ -16,6 +16,16 @@
 		"onCommand:csv-map-viewer.output"
 	],
 	"main": "./out/extension.js",
+
+	"bugs": {
+		"url": "https://github.com/hhyyg/miso.csv-map-viewer-vscode-ext/issues",
+		"email": "hiroka.yago@gmail.com"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/hhyyg/miso.csv-map-viewer-vscode-ext.git"
+	},
+	"homepage": "https://github.com/hhyyg/miso.csv-map-viewer-vscode-ext/blob/main/README.md",
 	"contributes": {
 		"commands": [
 			{
